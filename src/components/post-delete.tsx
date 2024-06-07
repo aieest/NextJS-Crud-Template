@@ -16,6 +16,6 @@ export default function PostDelete({ id }: PostDeleteProps) {
     };
 
     return <form onSubmit={deleteAction}>
-        <button type="submit" className="h-6 w-6 post-button"><TrashIcon/></button>
+        <button type="submit" className="post-button h-6 w-6 text-gray-600 hover:text-red-500"><TrashIcon/></button>
     </form>
 }
