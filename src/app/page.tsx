@@ -28,10 +28,10 @@ export default async function Home() {
                                 </div>
                             </div>
                             <div className="p-3 flex space-x-2">
-                                <Link href={`/posts/${post.id}`} className="post-button text-gray-600 hover:text-blue-600">
+                                <Link href={`/posts/${post.id}`} className="post-button text-gray-600">
                                     <EyeIcon className="h-6 w-6" />
                                 </Link>
-                                <Link href={`/posts/${post.id}/edit`} className="post-button text-gray-600 hover:text-blue-600">
+                                <Link href={`/posts/${post.id}/edit`} className="post-button text-gray-600">
                                     <PencilAltIcon className="h-6 w-6" />
                                 </Link>
                                 <PostDelete id={post.id} />

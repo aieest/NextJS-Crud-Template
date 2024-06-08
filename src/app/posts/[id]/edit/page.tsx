@@ -17,10 +17,10 @@ export default async function PostsEdit({ params }: PostsEditProps) {
     const updateAction = updatePost.bind(null, id)
 
     return (
-        <main className="flex min-h-screen flex-col items-start p-24">
-            <div className="mb-32 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+        <>
+            <div className="post-form-div text-center p-4 shadow-md rounded-lg">
                 <PostForm formAction={updateAction} initialData={{ title: post?.title ?? '', content: post?.content ?? '' }} />
             </div>
-        </main>
+        </>
     );
 }

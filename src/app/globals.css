@@ -17,9 +17,11 @@
 
 body {
   background-color: var(--background);
+  height: 100vh;
 }
 
 main {
+  height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -35,3 +37,67 @@ section.post-card {
 .post-button {
   transition: color 0.3s ease;
 }
+
+.post-button:hover {
+  color: var(--accent);
+}
+
+
+/***** Post Form Section *****/ 
+
+.post-form-div {
+  margin: auto;
+  width: 400px;
+  background: var(--card-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-form-header {
+  color: var(--accent);
+}
+
+.post-form-input {
+  border: 2px solid #e5e7eb;
+  width: 350px;
+  transition: border 0.3s ease;
+}
+
+.post-form-input:focus {
+  border: 2px solid var(--accent);
+  outline: none;
+}
+
+.post-form-input::placeholder {
+  transition: color 0.3 ease;
+}
+
+.post-form-input:focus::placeholder {
+  color: var(--accent);
+}
+
+.post-form-save {
+  background: var(--accent);
+  padding: 10px 25px;
+  color: var(--card-bg);
+  transition: background-color 0.3s ease;
+}
+
+.post-form-save:hover {
+  background-color: var(--background);
+}
+
+.post-form-cancel {
+  padding: 10px 25px;
+  color: var(--accent);
+  transition: color 0.3s ease;
+}
+
+.post-form-cancel:hover {
+  color: #f94343;
+}
+
+
+/***** End Section *****/
