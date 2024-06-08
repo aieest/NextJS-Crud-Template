@@ -20,6 +20,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <header>
             <Link href="/posts/create" className="bg-white px-4 py-2 rounded">Create Post</Link>
+            
         </header>
         <main>
             {children}

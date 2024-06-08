@@ -18,32 +18,32 @@ const PostRead = async ({ params }: PostReadProps) => {
     };
 
     return (
-        <main className="flex min-h-screen flex-col items-start p-24">
+        <>
             <Link href="/">
                 <HomeIcon className="h-6 w-6 text-blue-600" />
             </Link>
             {post === null ? (
-                    <p>Post Does Not Exist</p>
+                    <p className="text-center text-white-500">Post Does Not Exist</p>
                 ) : (
-            <div key={post.id}>
-                <div className="mb-4">
-                    <Link href={`/posts/${post.id}`}>
-                        <h2 className="mb-3 text-2xl font-semibold">{post.title}</h2>
-                    </Link>
-                    <p className="m-0 max-w-[30ch] text-sm opacity-100">{post.content}</p>
-                </div>
-                <div className="text-sm opacity-100">
-                    {'Updated at ' + new Date(post.updatedAt).toLocaleDateString("en-US", dateOptions)}
-                </div>
-                <Link href={`/posts/${post.id}/edit`} passHref>
-                    <PencilAltIcon className="h-6 w-6 text-blue-600" />
-                </Link>
-
-
-                <PostDelete id={post.id} />
-            </div>
+                <section key={post.id} className="post-card mb-6 bg-white shadow-md rounded-lg">
+                    <div className="flex justify-between items-center p-4">
+                        <div>
+                            <h2 className="text-xl font-semibold text-blue-600">{post.title}</h2>
+                            <p className="text-sm text-gray-500">{new Date(post.updatedAt).toLocaleDateString("en-US", dateOptions)}</p>
+                        </div>
+                        <div className="flex space-x-2">
+                            <Link href={`/posts/${post.id}/edit`} className="post-button text-gray-600">
+                                <PencilAltIcon className="h-6 w-6" />
+                            </Link>
+                            <PostDelete id={post.id} />
+                        </div>
+                    </div>
+                    <div className="p-4 text-gray-700">
+                        {post.content}
+                    </div>
+                </section>
                 )}
-        </main>
+        </>
     );
 };
 

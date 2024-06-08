@@ -14,7 +14,7 @@ export default async function Home() {
     return (
         <>
             {posts.length === 0 ? (
-                <p className="text-center text-gray-500">No posts</p>
+                <p className="text-center text-white-500">No posts</p>
             ) : (
                 posts.map(post => (
                     <section key={post.id} className="post-card mb-6 bg-white shadow-md rounded-lg">
