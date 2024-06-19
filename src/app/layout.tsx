@@ -1,9 +1,7 @@
-import type { Metadata } from "next";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import { SessionProvider } from "next-auth/react";
-import { useSession, signIn, signOut } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,30 +15,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider session={session}>
-          <header>
-            <nav>
-              <Link href="/">Home</Link>
-              {status === "authenticated" ? (
-                <>
-                  <span>Signed in as {session?.user?.email}</span>
-                  <button onClick={() => signOut()}>Sign out</button>
-                </>
-              ) : (
-                <button onClick={() => signIn()}>Sign in</button>
-              )}
-              <Link href="/posts/create" className="bg-white px-4 py-2 rounded">
-                Create Post
-              </Link>
-            </nav>
-          </header>
-          <main>{children}</main>
-        </SessionProvider>
+        <header className="flex justify-between p-4 bg-gray-100">
+          <Link href="/posts/create" className="bg-white px-4 py-2 rounded">Create Post</Link>
+          <div className="flex items-center space-x-4">
+            {session ? (
+              <>
+                <span>{session.user.name}</span>
+                <button onClick={() => signOut()}>Sign Out</button>
+              </>
+            ) : (
+              <Link href="/api/auth/signin">Sign In</Link>
+            )}
+          </div>
+        </header>
+        <main>
+          {children}
+        </main>
       </body>
     </html>
   );
