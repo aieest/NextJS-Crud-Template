@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { SessionProvider } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,16 +17,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { data: session, status } = useSession();
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header>
-            <Link href="/posts/create" className="bg-white px-4 py-2 rounded">Create Post</Link>
-            
-        </header>
-        <main>
-            {children}
-        </main>
+        <SessionProvider session={session}>
+          <header>
+            <nav>
+              <Link href="/">Home</Link>
+              {status === "authenticated" ? (
+                <>
+                  <span>Signed in as {session?.user?.email}</span>
+                  <button onClick={() => signOut()}>Sign out</button>
+                </>
+              ) : (
+                <button onClick={() => signIn()}>Sign in</button>
+              )}
+              <Link href="/posts/create" className="bg-white px-4 py-2 rounded">
+                Create Post
+              </Link>
+            </nav>
+          </header>
+          <main>{children}</main>
+        </SessionProvider>
       </body>
     </html>
   );
