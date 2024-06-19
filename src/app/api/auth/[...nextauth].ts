@@ -1,11 +1,13 @@
-import NextAuth from 'next-auth';
-import Providers from 'next-auth/providers';
+import NextAuth, { NextAuthOptions, Session, User } from 'next-auth';
+import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { db } from '@/db';
+import { JWT } from 'next-auth/jwt';
+import { AdapterUser } from 'next-auth/adapters';
 
-export default NextAuth({
+const options: NextAuthOptions = {
   providers: [
-    Providers.Email({
+    EmailProvider({
       server: process.env.EMAIL_SERVER,
       from: process.env.EMAIL_FROM,
     }),
@@ -13,19 +15,20 @@ export default NextAuth({
   ],
   adapter: PrismaAdapter(db),
   secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    jwt: true,
-  },
   callbacks: {
-    async session(session, user) {
-      session.user.id = user.id;
+    async session({ session, token }: { session: Session, token: JWT }) {
+      if (token && session.user) {
+        session.user.id = token.id as string;
+      }
       return session;
     },
-    async jwt(token, user) {
+    async jwt({ token, user }: { token: JWT, user?: User | AdapterUser }) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
   },
-});
+};
+
+export default NextAuth(options);
