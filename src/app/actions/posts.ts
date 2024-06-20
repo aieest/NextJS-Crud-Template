@@ -5,6 +5,8 @@ import type { Post } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../api/auth/[...nextauth]'
 
 const postSchema = z.object({
     title: z.string().min(3).max(255),
@@ -23,7 +25,6 @@ export async function createPost(
     formState: PostFormState,
     formData: FormData
 ): Promise<PostFormState> {
-
     const result = postSchema.safeParse({
         title: formData.get('title'),
         content: formData.get('content'),
@@ -35,12 +36,22 @@ export async function createPost(
         }
     }
 
+    const session = await getServerSession(authOptions)
+    if (!session || !session.user) {
+        return {
+            errors: {
+                _form: ['You must be logged in to create a post'],
+            },
+        }
+    }
+
     let post: Post
     try {
         post = await db.post.create({
             data: {
                 title: result.data.title,
                 content: result.data.content,
+                author: { connect: { id: session.user.id } },
             }
         })
     } catch (error: unknown) {
@@ -50,8 +61,7 @@ export async function createPost(
                     _form: [error.message],
                 },
             }
-        }
-        else {
+        } else {
             return {
                 errors: {
                     _form: ['Something went wrong'],
@@ -96,8 +106,7 @@ export async function updatePost(
                     _form: [error.message],
                 },
             }
-        }
-        else {
+        } else {
             return {
                 errors: {
                     _form: ['Something went wrong'],
@@ -125,8 +134,7 @@ export async function deletePost(
                     _form: [error.message],
                 },
             }
-        }
-        else {
+        } else {
             return {
                 errors: {
                     _form: ['Something went wrong'],
