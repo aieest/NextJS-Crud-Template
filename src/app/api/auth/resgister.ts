@@ -1,15 +1,17 @@
-// pages/api/auth/register.ts
-
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "@/db";
 import { hash } from "bcryptjs";
+import { db } from "@/db";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function register(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).end();
   }
 
   const { email, password, name } = req.body;
+
+  if (!email || !password || !name) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
 
   const hashedPassword = await hash(password, 10);
 
@@ -17,13 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const user = await db.user.create({
       data: {
         email,
-        password: hashedPassword,
         name,
+        password: hashedPassword,
       },
     });
-
-    res.status(201).json(user);
+    res.status(201).json({ message: "User created", user });
   } catch (error) {
-    res.status(500).json({ error: "User already exists" });
+    res.status(500).json({ message: "Error creating user", error });
   }
 }
