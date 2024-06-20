@@ -5,7 +5,7 @@ import { db } from '@/db';
 import { JWT } from 'next-auth/jwt';
 import { AdapterUser } from 'next-auth/adapters';
 
-const options: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       server: process.env.EMAIL_SERVER,
@@ -31,4 +31,4 @@ const options: NextAuthOptions = {
   },
 };
 
-export default NextAuth(options);
+export default NextAuth(authOptions);
